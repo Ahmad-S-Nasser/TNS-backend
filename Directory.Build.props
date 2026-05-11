@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Deterministic>true</Deterministic>
+    <Authors>TipsAndSteps Team</Authors>
+    <Company>Haya Karema - خطوات ونصائح</Company>
+    <Product>Tips and Steps National Maternal &amp; Child Health Platform</Product>
+    <Copyright>Copyright © 2024 Haya Karema</Copyright>
+    <RootNamespace>TipsAndSteps</RootNamespace>
+    <!-- Suppress known vulnerability warnings for packages with no available fix -->
+    <NoWarn>$(NoWarn);NU1903;NU1902</NoWarn>
+  </PropertyGroup>
+</Project>

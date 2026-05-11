@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>TipsAndSteps.Notification.Domain</AssemblyName>
+    <RootNamespace>TipsAndSteps.Notification.Domain</RootNamespace>
+  </PropertyGroup>
+</Project>
+

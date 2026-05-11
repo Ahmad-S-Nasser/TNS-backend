@@ -1,0 +1,65 @@
+{
+  "realm": "tips-steps",
+  "displayName": "Tips & Steps — خطوات ونصائح",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "refreshTokenMaxReuse": 0,
+  "roles": {
+    "realm": [
+      { "name": "parent",     "description": "Mobile app parent user (ولي الأمر)" },
+      { "name": "doctor",     "description": "Healthcare professional (الطبيب)" },
+      { "name": "admin",      "description": "Platform administrator (المشرف)" },
+      { "name": "superadmin", "description": "Super administrator with full access" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "tns-mobile",
+      "name": "Tips & Steps Mobile App",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["tns://callback", "http://localhost:3000/*"],
+      "webOrigins": ["*"]
+    },
+    {
+      "clientId": "tns-admin",
+      "name": "Tips & Steps Admin Portal",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:8080/*", "http://localhost:3001/*"],
+      "webOrigins": ["*"]
+    },
+    {
+      "clientId": "tns-gateway",
+      "name": "API Gateway (YARP)",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true
+    },
+    {
+      "clientId": "tns-admin-cli",
+      "name": "Admin CLI (UserManagement Service)",
+      "enabled": true,
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "secret": "change-me-in-production"
+    }
+  ],
+  "smtpServer": {
+    "host": "",
+    "port": "587",
+    "from": "noreply@tipsandsteps.eg",
+    "fromDisplayName": "خطوات ونصائح"
+  }
+}

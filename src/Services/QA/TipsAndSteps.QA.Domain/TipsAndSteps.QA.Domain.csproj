@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>TipsAndSteps.QA.Domain</AssemblyName>
+    <RootNamespace>TipsAndSteps.QA.Domain</RootNamespace>
+  </PropertyGroup>
+</Project>
+

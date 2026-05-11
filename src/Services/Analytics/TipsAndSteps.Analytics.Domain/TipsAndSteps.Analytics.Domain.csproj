@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>TipsAndSteps.Analytics.Domain</AssemblyName>
+    <RootNamespace>TipsAndSteps.Analytics.Domain</RootNamespace>
+  </PropertyGroup>
+</Project>
+

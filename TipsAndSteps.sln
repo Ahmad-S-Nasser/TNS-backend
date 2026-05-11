@@ -1,0 +1,80 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34525.116
+
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Gateway", "src\Gateway\TipsAndSteps.Gateway\TipsAndSteps.Gateway.csproj", "{11111111-0000-0000-0000-000000000001}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Shared.Contracts", "src\Shared\TipsAndSteps.Shared.Contracts\TipsAndSteps.Shared.Contracts.csproj", "{11111111-0000-0000-0000-000000000010}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Shared.Infrastructure", "src\Shared\TipsAndSteps.Shared.Infrastructure\TipsAndSteps.Shared.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000011}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.UserManagement.API", "src\Services\UserManagement\TipsAndSteps.UserManagement.API\TipsAndSteps.UserManagement.API.csproj", "{11111111-0000-0000-0000-000000000021}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.UserManagement.Application", "src\Services\UserManagement\TipsAndSteps.UserManagement.Application\TipsAndSteps.UserManagement.Application.csproj", "{11111111-0000-0000-0000-000000000022}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.UserManagement.Domain", "src\Services\UserManagement\TipsAndSteps.UserManagement.Domain\TipsAndSteps.UserManagement.Domain.csproj", "{11111111-0000-0000-0000-000000000023}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.UserManagement.Infrastructure", "src\Services\UserManagement\TipsAndSteps.UserManagement.Infrastructure\TipsAndSteps.UserManagement.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000024}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Content.API", "src\Services\Content\TipsAndSteps.Content.API\TipsAndSteps.Content.API.csproj", "{11111111-0000-0000-0000-000000000031}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Content.Application", "src\Services\Content\TipsAndSteps.Content.Application\TipsAndSteps.Content.Application.csproj", "{11111111-0000-0000-0000-000000000032}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Content.Domain", "src\Services\Content\TipsAndSteps.Content.Domain\TipsAndSteps.Content.Domain.csproj", "{11111111-0000-0000-0000-000000000033}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Content.Infrastructure", "src\Services\Content\TipsAndSteps.Content.Infrastructure\TipsAndSteps.Content.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000034}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.GrowthMatrix.API", "src\Services\GrowthMatrix\TipsAndSteps.GrowthMatrix.API\TipsAndSteps.GrowthMatrix.API.csproj", "{11111111-0000-0000-0000-000000000041}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.GrowthMatrix.Application", "src\Services\GrowthMatrix\TipsAndSteps.GrowthMatrix.Application\TipsAndSteps.GrowthMatrix.Application.csproj", "{11111111-0000-0000-0000-000000000042}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.GrowthMatrix.Domain", "src\Services\GrowthMatrix\TipsAndSteps.GrowthMatrix.Domain\TipsAndSteps.GrowthMatrix.Domain.csproj", "{11111111-0000-0000-0000-000000000043}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.GrowthMatrix.Infrastructure", "src\Services\GrowthMatrix\TipsAndSteps.GrowthMatrix.Infrastructure\TipsAndSteps.GrowthMatrix.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000044}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Notification.API", "src\Services\Notification\TipsAndSteps.Notification.API\TipsAndSteps.Notification.API.csproj", "{11111111-0000-0000-0000-000000000051}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Notification.Application", "src\Services\Notification\TipsAndSteps.Notification.Application\TipsAndSteps.Notification.Application.csproj", "{11111111-0000-0000-0000-000000000052}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Notification.Domain", "src\Services\Notification\TipsAndSteps.Notification.Domain\TipsAndSteps.Notification.Domain.csproj", "{11111111-0000-0000-0000-000000000053}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Notification.Infrastructure", "src\Services\Notification\TipsAndSteps.Notification.Infrastructure\TipsAndSteps.Notification.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000054}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Analytics.API", "src\Services\Analytics\TipsAndSteps.Analytics.API\TipsAndSteps.Analytics.API.csproj", "{11111111-0000-0000-0000-000000000061}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Analytics.Application", "src\Services\Analytics\TipsAndSteps.Analytics.Application\TipsAndSteps.Analytics.Application.csproj", "{11111111-0000-0000-0000-000000000062}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Analytics.Domain", "src\Services\Analytics\TipsAndSteps.Analytics.Domain\TipsAndSteps.Analytics.Domain.csproj", "{11111111-0000-0000-0000-000000000063}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.Analytics.Infrastructure", "src\Services\Analytics\TipsAndSteps.Analytics.Infrastructure\TipsAndSteps.Analytics.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000064}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.HealthIntelligence.API", "src\Services\HealthIntelligence\TipsAndSteps.HealthIntelligence.API\TipsAndSteps.HealthIntelligence.API.csproj", "{11111111-0000-0000-0000-000000000071}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.HealthIntelligence.Application", "src\Services\HealthIntelligence\TipsAndSteps.HealthIntelligence.Application\TipsAndSteps.HealthIntelligence.Application.csproj", "{11111111-0000-0000-0000-000000000072}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.HealthIntelligence.Domain", "src\Services\HealthIntelligence\TipsAndSteps.HealthIntelligence.Domain\TipsAndSteps.HealthIntelligence.Domain.csproj", "{11111111-0000-0000-0000-000000000073}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.HealthIntelligence.Infrastructure", "src\Services\HealthIntelligence\TipsAndSteps.HealthIntelligence.Infrastructure\TipsAndSteps.HealthIntelligence.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000074}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.QA.API", "src\Services\QA\TipsAndSteps.QA.API\TipsAndSteps.QA.API.csproj", "{11111111-0000-0000-0000-000000000081}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.QA.Application", "src\Services\QA\TipsAndSteps.QA.Application\TipsAndSteps.QA.Application.csproj", "{11111111-0000-0000-0000-000000000082}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.QA.Domain", "src\Services\QA\TipsAndSteps.QA.Domain\TipsAndSteps.QA.Domain.csproj", "{11111111-0000-0000-0000-000000000083}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TipsAndSteps.QA.Infrastructure", "src\Services\QA\TipsAndSteps.QA.Infrastructure\TipsAndSteps.QA.Infrastructure.csproj", "{11111111-0000-0000-0000-000000000084}"
+EndProject
+
+Global
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {11111111-0000-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {11111111-0000-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {11111111-0000-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {11111111-0000-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+EndGlobal

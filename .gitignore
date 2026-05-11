@@ -1,0 +1,30 @@
+## .NET / C#
+bin/
+obj/
+*.user
+*.suo
+.vs/
+_ReSharper*/
+*.DotSettings.user
+
+## Docker
+docker-compose*.override.yml
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## Secrets / env
+*.env
+.env
+secrets/
+**/appsettings.*.json
+!**/appsettings.Development.json
+
+## Logs
+logs/
+*.log
+
+## OS
+.DS_Store
+Thumbs.db

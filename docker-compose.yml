@@ -1,0 +1,187 @@
+# Tips & Steps (خطوات ونصائح) — Docker Compose
+#
+# Prerequisites on host machine:
+#   ✓ MongoDB installed locally          → connects via host.docker.internal:27017
+#   ✓ Kafka already running in Docker    → connects via host.docker.internal:9092
+#
+# This compose starts:
+#   - Keycloak + PostgreSQL  (identity provider)
+#   - Schema Registry        (Kafka schema management)
+#   - Kafka UI               (developer tool, points to existing Kafka)
+#   - Redis                  (caching)
+#   - Seq                    (structured log viewer)
+#   - All 8 .NET microservices
+
+version: "3.9"
+
+x-service-defaults: &service-defaults
+  restart: unless-stopped
+  networks: [tns-network]
+  extra_hosts:
+    - "host.docker.internal:host-gateway"   # lets containers reach host MongoDB/Kafka
+
+services:
+
+  # ── API Gateway (YARP) ──────────────────────────────────────────────────────
+  gateway:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Gateway/TipsAndSteps.Gateway/Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [seq]
+
+  # ── Microservices ────────────────────────────────────────────────────────────
+  usermgmt-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/UserManagement/TipsAndSteps.UserManagement.API/Dockerfile
+    ports: ["6001:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [redis, seq]
+
+  content-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/Content/TipsAndSteps.Content.API/Dockerfile
+    ports: ["6002:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [redis, seq]
+
+  growth-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/GrowthMatrix/TipsAndSteps.GrowthMatrix.API/Dockerfile
+    ports: ["6003:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [redis, seq]
+
+  notification-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/Notification/TipsAndSteps.Notification.API/Dockerfile
+    ports: ["6004:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [seq]
+
+  analytics-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/Analytics/TipsAndSteps.Analytics.API/Dockerfile
+    ports: ["6005:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [seq]
+
+  healthintel-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/HealthIntelligence/TipsAndSteps.HealthIntelligence.API/Dockerfile
+    ports: ["6006:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [seq]
+
+  qa-svc:
+    <<: *service-defaults
+    build:
+      context: .
+      dockerfile: src/Services/QA/TipsAndSteps.QA.API/Dockerfile
+    ports: ["6007:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!
+      Jwt__Issuer: tips-steps-auth
+      Jwt__Audience: tips-steps-api
+      Seq__Url: http://seq:80
+    depends_on: [seq]
+
+
+  # ── Schema Registry (connects to existing Kafka on host) ─────────────────────
+  schema-registry:
+    <<: *service-defaults
+    image: confluentinc/cp-schema-registry:7.7.0
+    ports: ["6091:8081"]
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: host.docker.internal:9092
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+
+  # ── Kafka UI (developer tool — points to existing Kafka) ─────────────────────
+  kafka-ui:
+    <<: *service-defaults
+    image: provectuslabs/kafka-ui:latest
+    ports: ["6092:8080"]
+    environment:
+      KAFKA_CLUSTERS_0_NAME: tns-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: host.docker.internal:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+    depends_on: [schema-registry]
+
+  # ── Redis ─────────────────────────────────────────────────────────────────────
+  redis:
+    <<: *service-defaults
+    image: redis:7.2-alpine
+    ports: ["6379:6379"]
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+
+  # ── Seq Structured Logging ────────────────────────────────────────────────────
+  seq:
+    <<: *service-defaults
+    image: datalust/seq:latest
+    ports: ["6093:80"]
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_ADMINPASSWORD: "admin"
+    volumes:
+      - seq-data:/data
+
+volumes:
+  redis-data:
+  seq-data:
+
+networks:
+  tns-network:
+    driver: bridge

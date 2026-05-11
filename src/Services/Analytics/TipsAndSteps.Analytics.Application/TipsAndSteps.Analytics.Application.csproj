@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>TipsAndSteps.Analytics.Application</AssemblyName>
+    <RootNamespace>TipsAndSteps.Analytics.Application</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
+    <ProjectReference Include="..\TipsAndSteps.Analytics.Domain\TipsAndSteps.Analytics.Domain.csproj" />
+    <ProjectReference Include="..\..\..\Shared\TipsAndSteps.Shared.Contracts\TipsAndSteps.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\Shared\TipsAndSteps.Shared.Infrastructure\TipsAndSteps.Shared.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
+
