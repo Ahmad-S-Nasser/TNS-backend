@@ -48,7 +48,6 @@ public sealed class RegisterUserHandler : IRequestHandler<RegisterUserCommand, R
 
         return new RegisterUserResult(
             user.Id,
-            user.Id, // Mirroring for compatibility
             user.Email,
             user.Role.ToString());
     }

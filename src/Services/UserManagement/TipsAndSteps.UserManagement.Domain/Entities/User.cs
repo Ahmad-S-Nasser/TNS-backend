@@ -3,13 +3,12 @@ using TipsAndSteps.UserManagement.Domain.Enums;
 namespace TipsAndSteps.UserManagement.Domain.Entities;
 
 /// <summary>
-/// Mirror of the Keycloak user record, stored in MongoDB for fast query.
-/// The authoritative identity lives in Keycloak; this is the read-model.
+/// Represents an application user stored in MongoDB.
+/// Authentication is handled via manual JWT (BCrypt password + HS256 token).
 /// </summary>
 public sealed class User
 {
-    public string    Id             { get; set; } = string.Empty; // Keycloak sub
-    public string    KeycloakId     { get; set; } = string.Empty;
+    public string    Id             { get; set; } = string.Empty;
     public string    Email          { get; set; } = string.Empty;
     public string    PasswordHash   { get; set; } = string.Empty;
     public string?   PhoneNumber    { get; set; }

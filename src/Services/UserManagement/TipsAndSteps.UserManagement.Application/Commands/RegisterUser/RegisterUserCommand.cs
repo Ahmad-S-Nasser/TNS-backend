@@ -16,6 +16,5 @@ public sealed record RegisterUserCommand(
 
 public sealed record RegisterUserResult(
     string UserId,
-    string KeycloakId,
     string Email,
     string Role);

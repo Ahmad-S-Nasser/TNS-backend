@@ -32,12 +32,14 @@ public sealed class JwtProvider(IConfiguration configuration) : IJwtProvider
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var expiryHours = configuration.GetValue<int>("Jwt:ExpiryHours", 8);
+
         var token = new JwtSecurityToken(
             issuer,
             audience,
             claims,
             null,
-            DateTime.UtcNow.AddHours(8),
+            DateTime.UtcNow.AddHours(expiryHours),
             creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
