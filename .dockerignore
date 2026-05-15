@@ -1,0 +1,12 @@
+**/.git
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/out
+**/publish
+TNS frontend/
+node_modules/
+*.log
+docker-compose.override.yml
+.env
