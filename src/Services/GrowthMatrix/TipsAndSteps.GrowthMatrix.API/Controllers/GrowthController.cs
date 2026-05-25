@@ -85,6 +85,114 @@ public class GrowthController : ControllerBase
         return Ok(rules);
     }
 
+    /// <summary>
+    /// Mobile-friendly catalog: all growth field categories enriched with skill and milestone counts.
+    /// Use the returned <c>id</c> when calling GET /api/growth/fields/{id}.
+    /// </summary>
+    [HttpGet("fields")]
+    public async Task<IActionResult> GetFields()
+    {
+        var categories = await _categories.ListAsync();
+        var skills     = await _skills.ListAsync();
+        var rules      = await _rules.ListAsync();
+
+        var result = categories
+            .OrderBy(c => c.SortOrder)
+            .Select(c =>
+            {
+                var catSkills     = skills.Where(s => s.CategoryId == c.Id).ToList();
+                var catSkillIds   = catSkills.Select(s => s.Id).ToHashSet();
+                var milestoneCount = rules.Count(r => catSkillIds.Contains(r.SkillId));
+
+                return new GrowthFieldSummaryDto(
+                    Id:             c.Id,
+                    NameAr:         c.Name.Ar,
+                    NameEn:         c.Name.En,
+                    DescriptionAr:  c.Description.Ar,
+                    DescriptionEn:  c.Description.En,
+                    IconKey:        c.IconKey,
+                    IconUrl:        c.IconUrl,
+                    ImageUrl:       c.ImageUrl,
+                    Color:          c.Color,
+                    SortOrder:      c.SortOrder,
+                    SkillCount:     catSkills.Count,
+                    MilestoneCount: milestoneCount);
+            });
+
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Mobile-friendly field detail: single category with its full skill list, per-skill milestones,
+    /// and improvement tips aggregated for easy Flutter consumption.
+    /// </summary>
+    [HttpGet("fields/{id}")]
+    public async Task<IActionResult> GetFieldById(string id)
+    {
+        var categories = await _categories.ListAsync();
+        var category   = categories.FirstOrDefault(c => c.Id == id);
+        if (category is null) return NotFound();
+
+        var skills = (await _skills.ListAsync())
+            .Where(s => s.CategoryId == id)
+            .OrderBy(s => s.SortOrder)
+            .ToList();
+
+        var allRules   = await _rules.ListAsync();
+        var skillIds   = skills.Select(s => s.Id).ToHashSet();
+        var categoryRules = allRules.Where(r => skillIds.Contains(r.SkillId)).ToList();
+
+        var skillDtos = skills.Select(skill =>
+        {
+            var skillRules = categoryRules
+                .Where(r => r.SkillId == skill.Id)
+                .Select(r => new GrowthMilestoneDto(
+                    RuleId:            r.Id,
+                    ExpectedMonth:     r.ExpectedMonth,
+                    ExpectedBoolean:   r.ExpectedBoolean,
+                    MinValue:          r.MinValue,
+                    OptimalMin:        r.OptimalMin,
+                    OptimalMax:        r.OptimalMax,
+                    MaxValue:          r.MaxValue,
+                    MinScaleValue:     r.MinScaleValue,
+                    OptimalScaleValue: r.OptimalScaleValue))
+                .OrderBy(r => r.ExpectedMonth)
+                .ToList();
+
+            var tips = skill.ImprovementTips
+                .Select(t => new LocalizedStringDto(t.En, t.Ar))
+                .ToList();
+
+            return new GrowthFieldSkillDto(
+                Id:          skill.Id,
+                TitleAr:     skill.Title.Ar,
+                TitleEn:     skill.Title.En,
+                DescriptionAr: skill.Description.Ar,
+                DescriptionEn: skill.Description.En,
+                MetricType:  skill.MetricType.ToString(),
+                Unit:        skill.Unit,
+                Weight:      skill.Weight,
+                SortOrder:   skill.SortOrder,
+                Milestones:  skillRules,
+                ImprovementTips: tips);
+        }).ToList();
+
+        var dto = new GrowthFieldDetailDto(
+            Id:             category.Id,
+            NameAr:         category.Name.Ar,
+            NameEn:         category.Name.En,
+            DescriptionAr:  category.Description.Ar,
+            DescriptionEn:  category.Description.En,
+            IconKey:        category.IconKey,
+            IconUrl:        category.IconUrl,
+            ImageUrl:       category.ImageUrl,
+            Color:          category.Color,
+            SortOrder:      category.SortOrder,
+            Skills:         skillDtos);
+
+        return Ok(dto);
+    }
+
     [HttpGet("age-groups")]
     public async Task<IActionResult> GetAgeGroups() => Ok(await _ageGroups.ListAsync());
 
@@ -190,3 +298,60 @@ public class GrowthController : ControllerBase
         return NoContent();
     }
 }
+
+// ──────────────────────────────────────────────────────────────────────────
+// DTOs for GET /api/growth/fields and GET /api/growth/fields/{id}
+// ──────────────────────────────────────────────────────────────────────────
+
+public sealed record LocalizedStringDto(string En, string Ar);
+
+public sealed record GrowthFieldSummaryDto(
+    string  Id,
+    string  NameAr,
+    string  NameEn,
+    string  DescriptionAr,
+    string  DescriptionEn,
+    string  IconKey,
+    string? IconUrl,
+    string? ImageUrl,
+    string  Color,
+    int     SortOrder,
+    int     SkillCount,
+    int     MilestoneCount);
+
+public sealed record GrowthMilestoneDto(
+    string  RuleId,
+    int     ExpectedMonth,
+    bool?   ExpectedBoolean,
+    double? MinValue,
+    double? OptimalMin,
+    double? OptimalMax,
+    double? MaxValue,
+    int?    MinScaleValue,
+    int?    OptimalScaleValue);
+
+public sealed record GrowthFieldSkillDto(
+    string  Id,
+    string  TitleAr,
+    string  TitleEn,
+    string  DescriptionAr,
+    string  DescriptionEn,
+    string  MetricType,
+    string? Unit,
+    int     Weight,
+    int     SortOrder,
+    List<GrowthMilestoneDto>    Milestones,
+    List<LocalizedStringDto>    ImprovementTips);
+
+public sealed record GrowthFieldDetailDto(
+    string  Id,
+    string  NameAr,
+    string  NameEn,
+    string  DescriptionAr,
+    string  DescriptionEn,
+    string  IconKey,
+    string? IconUrl,
+    string? ImageUrl,
+    string  Color,
+    int     SortOrder,
+    List<GrowthFieldSkillDto> Skills);

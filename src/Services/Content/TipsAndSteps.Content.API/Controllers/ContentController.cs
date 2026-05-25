@@ -31,6 +31,7 @@ public sealed class ContentController : ControllerBase
     [Authorize]
     public async Task<IActionResult> List(
         [FromQuery] string? section,
+        [FromQuery] int? sectionId,
         [FromQuery] ContentStatus? status,
         [FromQuery] string? query,
         [FromQuery] string lang = "ar",
@@ -38,11 +39,22 @@ public sealed class ContentController : ControllerBase
         [FromQuery] int pageSize = 20,
         CancellationToken ct = default)
     {
-        _logger.LogInformation("Listing content for section: {Section}, query: {Query}", section, query);
+        _logger.LogInformation("Listing content for section: {Section}, sectionId: {SectionId}, query: {Query}", section, sectionId, query);
+
         if (!string.IsNullOrEmpty(query))
         {
             var searchResults = await _readRepo.SearchAsync(query, lang, page, pageSize, ct);
             return Ok(searchResults);
+        }
+
+        // sectionId takes precedence over string section name
+        if (sectionId.HasValue)
+        {
+            if (!Enum.IsDefined(typeof(ContentSection), sectionId.Value))
+                return BadRequest(new { message = $"Unknown sectionId: {sectionId.Value}" });
+
+            var byId = await _readRepo.ListBySectionAsync((ContentSection)sectionId.Value, page, pageSize, status, ct);
+            return Ok(byId);
         }
 
         if (!string.IsNullOrEmpty(section))
@@ -53,8 +65,7 @@ public sealed class ContentController : ControllerBase
                 var sectionItems = await _readRepo.ListBySectionAsync(sectionEnum, page, pageSize, status, ct);
                 return Ok(sectionItems);
             }
-            // Handle kebab-case manually if needed, but TryParse with ignoreCase=true handles most simple ones
-            // For sexual-education -> SexualEducation, we might need a map
+            // Handle kebab-case names
             var mappedSection = section.ToLower() switch {
                 "sexual-education" => ContentSection.SexualEducation,
                 "educational-games" => ContentSection.EducationalGames,
@@ -83,6 +94,28 @@ public sealed class ContentController : ControllerBase
             all = all.Where(a => a.Status == status.Value).ToList();
         }
         return Ok(all.Skip((page - 1) * pageSize).Take(pageSize));
+    }
+
+    /// <summary>
+    /// Returns the catalog of all content sections with their numeric IDs.
+    /// Use the returned <c>id</c> as <c>sectionId</c> when calling GET /api/content.
+    /// </summary>
+    [HttpGet("sections")]
+    [Authorize]
+    [ProducesResponseType(typeof(IEnumerable<ContentSectionDto>), StatusCodes.Status200OK)]
+    public IActionResult GetSections()
+    {
+        var sections = Enum.GetValues<ContentSection>()
+            .Select(s => new ContentSectionDto((int)s, s.ToString(), ToKebabCase(s.ToString())))
+            .OrderBy(s => s.Id);
+        return Ok(sections);
+    }
+
+    private static string ToKebabCase(string pascalCase)
+    {
+        // SexualEducation -> sexual-education
+        return string.Concat(pascalCase.Select((c, i) =>
+            i > 0 && char.IsUpper(c) ? "-" + char.ToLower(c) : char.ToLower(c).ToString()));
     }
 
 
@@ -220,3 +253,6 @@ public sealed class ContentController : ControllerBase
         return Ok(items);
     }
 }
+
+/// <summary>Catalog entry returned by GET /api/content/sections</summary>
+public sealed record ContentSectionDto(int Id, string Name, string Slug);

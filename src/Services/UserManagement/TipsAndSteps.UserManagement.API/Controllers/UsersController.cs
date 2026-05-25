@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TipsAndSteps.UserManagement.Application.Commands.RegisterUser;
+using TipsAndSteps.UserManagement.Application.Commands.UpdateProfile;
 using TipsAndSteps.UserManagement.Application.Queries.GetUser;
 using TipsAndSteps.UserManagement.Domain.Enums;
 
@@ -50,6 +51,27 @@ public sealed class UsersController : ControllerBase
         var result = await _mediator.Send(new GetUserQuery(userId), ct);
         return result is null ? NotFound() : Ok(result);
     }
+
+    /// <summary>Update the current authenticated user's own profile</summary>
+    [HttpPut("me")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateMe(
+        [FromBody] UpdateProfileRequest request,
+        CancellationToken ct)
+    {
+        var userId = User.FindFirst("sub")?.Value
+                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+        var command = new UpdateProfileCommand(
+            userId,
+            request.FirstName,
+            request.LastName,
+            request.PhoneNumber,
+            request.PreferredLanguage);
+        var result = await _mediator.Send(command, ct);
+        return result ? NoContent() : NotFound();
+    }
     /// <summary>List all users (paginated)</summary>
     [HttpGet]
     [Authorize]
@@ -75,3 +97,10 @@ public sealed class UsersController : ControllerBase
         return result ? NoContent() : NotFound();
     }
 }
+
+/// <summary>Request body for PUT /api/users/me</summary>
+public sealed record UpdateProfileRequest(
+    string? FirstName,
+    string? LastName,
+    string? PhoneNumber,
+    string? PreferredLanguage);
