@@ -21,6 +21,10 @@ builder.Services
     .AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
+// ── Swagger Aggregation ───────────────────────────────────────────────────────
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // ── OpenTelemetry ─────────────────────────────────────────────────────────────
 builder.Services.AddOpenTelemetry()
     .WithTracing(t => t
@@ -42,6 +46,21 @@ app.UseSerilogRequestLogging();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ── Swagger UI Aggregation ────────────────────────────────────────────────────
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/usermgmt/v1/swagger.json", "UserManagement Service");
+    c.SwaggerEndpoint("/swagger/content/v1/swagger.json", "Content Service");
+    c.SwaggerEndpoint("/swagger/growth/v1/swagger.json", "Growth Service");
+    c.SwaggerEndpoint("/swagger/notification/v1/swagger.json", "Notification Service");
+    c.SwaggerEndpoint("/swagger/analytics/v1/swagger.json", "Analytics Service");
+    c.SwaggerEndpoint("/swagger/healthintel/v1/swagger.json", "HealthIntelligence Service");
+    c.SwaggerEndpoint("/swagger/qa/v1/swagger.json", "QA Service");
+    c.RoutePrefix = "swagger";
+});
+
 app.MapReverseProxy();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", service = "gateway" }));
 

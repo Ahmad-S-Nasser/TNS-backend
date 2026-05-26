@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: src/Gateway/TipsAndSteps.Gateway/Dockerfile
-    ports: ["8080:8080"]
+    ports: ["6000:8080"]
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       Jwt__Secret: a_very_long_and_secure_secret_key_for_tips_and_steps_123!

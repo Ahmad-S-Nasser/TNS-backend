@@ -42,6 +42,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "bearer",
         BearerFormat = "JWT"
     });
+    c.CustomSchemaIds(type => type.FullName);
 });
 
 var app = builder.Build();
@@ -49,11 +50,8 @@ var app = builder.Build();
 // ── Seed Users ────────────────────────────────────────────────────────────────
 await TipsAndSteps.UserManagement.API.Infrastructure.DbSeeder.SeedAsync(app.Services);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseSerilogRequestLogging();
 app.UseAuthentication();
