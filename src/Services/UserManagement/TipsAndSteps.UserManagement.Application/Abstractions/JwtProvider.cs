@@ -24,7 +24,7 @@ public sealed class JwtProvider(IConfiguration configuration) : IJwtProvider
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(JwtRegisteredClaimNames.Email, user.Email),
-            new(ClaimTypes.Role, user.Role.ToString()),
+            new(ClaimTypes.Role, user.Role.ToString().ToLowerInvariant()),
             new("firstName", user.FirstName),
             new("lastName", user.LastName)
         };

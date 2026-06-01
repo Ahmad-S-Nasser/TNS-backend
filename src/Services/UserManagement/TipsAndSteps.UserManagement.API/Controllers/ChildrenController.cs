@@ -5,7 +5,7 @@ namespace TipsAndSteps.UserManagement.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "parent")]
+[Authorize(Roles = "parent,Parent")]
 public sealed class ChildrenController : ControllerBase
 {
     // TODO: Implement child profile CRUD using CQRS (CreateChildCommand, etc.)

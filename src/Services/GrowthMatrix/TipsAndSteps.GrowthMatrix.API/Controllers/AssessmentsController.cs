@@ -6,7 +6,7 @@ using TipsAndSteps.GrowthMatrix.Application.Commands.RecordAssessment;
 namespace TipsAndSteps.GrowthMatrix.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/growth/assessments")]
 [Authorize]
 public sealed class AssessmentsController : ControllerBase
 {
@@ -15,14 +15,14 @@ public sealed class AssessmentsController : ControllerBase
 
     /// <summary>Submit a growth matrix assessment for a child</summary>
     [HttpPost]
-    [Authorize(Roles = "parent")]
+    [Authorize(Roles = "parent,Parent")]
     [ProducesResponseType(typeof(RecordAssessmentResult), StatusCodes.Status201Created)]
     public async Task<IActionResult> RecordAssessment(
         [FromBody] RecordAssessmentCommand command,
         CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
-        return Created($"/api/assessments/{result.AssessmentId}", result);
+        return Created($"/api/growth/assessments/{result.AssessmentId}", result);
     }
 
     /// <summary>Get assessment report for a child</summary>
