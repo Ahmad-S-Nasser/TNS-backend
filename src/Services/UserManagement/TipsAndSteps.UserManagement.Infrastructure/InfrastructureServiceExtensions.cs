@@ -26,6 +26,8 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserReadRepository, UserRepository>();
         services.AddScoped<IRoleDefaultRepository, RoleDefaultRepository>();
+        services.AddScoped<IChildProfileRepository, ChildProfileRepository>();
+        services.AddScoped<IChildProfileReadRepository, ChildProfileRepository>();
 
         // JWT Provider
         services.AddSingleton<IJwtProvider, JwtProvider>();
