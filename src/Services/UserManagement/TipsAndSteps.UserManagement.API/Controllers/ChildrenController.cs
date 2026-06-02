@@ -17,7 +17,8 @@ public sealed class ChildrenController(ISender sender) : ControllerBase
     public async Task<IActionResult> GetMyChildren(CancellationToken ct)
     {
         var parentId = User.FindFirst("sub")?.Value
-                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+                     ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? throw new UnauthorizedAccessException("No sub or NameIdentifier claim in token.");
 
         var children = await sender.Send(new GetChildrenQuery(parentId), ct);
         return Ok(children);
@@ -29,7 +30,8 @@ public sealed class ChildrenController(ISender sender) : ControllerBase
     public async Task<IActionResult> CreateChild([FromBody] CreateChildRequest request, CancellationToken ct)
     {
         var parentId = User.FindFirst("sub")?.Value
-                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+                     ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? throw new UnauthorizedAccessException("No sub or NameIdentifier claim in token.");
 
         var command = new CreateChildCommand(
             parentId,

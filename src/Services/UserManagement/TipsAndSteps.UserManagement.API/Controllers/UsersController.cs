@@ -47,7 +47,8 @@ public sealed class UsersController : ControllerBase
     public async Task<IActionResult> GetMe(CancellationToken ct)
     {
         var userId = User.FindFirst("sub")?.Value
-                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+                     ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? throw new UnauthorizedAccessException("No sub or NameIdentifier claim in token.");
         var result = await _mediator.Send(new GetUserQuery(userId), ct);
         return result is null ? NotFound() : Ok(result);
     }
@@ -62,7 +63,8 @@ public sealed class UsersController : ControllerBase
         CancellationToken ct)
     {
         var userId = User.FindFirst("sub")?.Value
-                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+                     ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? throw new UnauthorizedAccessException("No sub or NameIdentifier claim in token.");
         var command = new UpdateProfileCommand(
             userId,
             request.FirstName,

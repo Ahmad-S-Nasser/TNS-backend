@@ -31,7 +31,8 @@ public sealed class AuthController(ISender sender) : ControllerBase
         CancellationToken ct)
     {
         var userId = User.FindFirst("sub")?.Value
-                     ?? throw new UnauthorizedAccessException("No sub claim in token.");
+                     ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                     ?? throw new UnauthorizedAccessException("No sub or NameIdentifier claim in token.");
 
         var result = await sender.Send(
             new ChangePasswordCommand(userId, request.CurrentPassword, request.NewPassword), ct);
